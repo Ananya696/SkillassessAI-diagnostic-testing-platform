@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkillAssess AI — Diagnostic Multi-Domain Technical Skill Assessment</title>
+  <meta name="description" content="Adaptive cognitive assessment platform evaluating technical proficiency across computer science and software engineering domains." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">SkillAssess<strong>AI</strong></span>
+      </div>
+      <div class="header-tags">
+        <span id="engine-badge" class="header-tag active-engine">Adaptive Multi-Domain Engine</span>
+      </div>
+    </header>
+
+    <!-- Error Banner -->
+    <div id="error-banner" class="error-banner hidden" role="alert">
+      <div class="error-content">
+        <span class="error-icon">⚠️</span>
+        <span id="error-message" class="error-text">An error occurred.</span>
+      </div>
+      <button id="error-close-btn" class="error-close-btn" aria-label="Dismiss error">&times;</button>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════ -->
+    <!-- 1. START / SETUP SCREEN                                                -->
+    <!-- ══════════════════════════════════════════════════════════════════════ -->
+    <section id="start-screen" class="view-screen active">
+      <div class="card hero-card">
+        <div class="badge-pill">Adaptive Curriculum Assessment</div>
+        <h1 class="hero-title">Diagnostic Multi-Domain Technical Skill Assessment</h1>
+        <p class="hero-subtitle">
+          Evaluates conceptual accuracy, response speed, and cognitive pacing across balanced subtopic curricula with zero option length bias.
+        </p>
+
+        <form id="start-form" class="start-form">
+          <!-- Technical Domain Custom Dropdown -->
+          <div class="form-group">
+            <label id="topic-label" for="domain-select-trigger">Select Technical Domain:</label>
+            
+            <div class="custom-dropdown-container" id="domain-dropdown-container">
+              <button 
+                type="button" 
+                class="custom-dropdown-trigger" 
+                id="domain-select-trigger" 
+                aria-haspopup="listbox" 
+                aria-expanded="false" 
+                aria-labelledby="topic-label"
+              >
+                <span class="dropdown-trigger-text" id="domain-trigger-text">-- Select a technical domain --</span>
+                <span class="dropdown-arrow" aria-hidden="true">▾</span>
+              </button>
+
+              <div class="custom-dropdown-menu" id="domain-dropdown-menu" role="listbox" aria-labelledby="topic-label">
+                <!-- Dropdown options rendered dynamically -->
+              </div>
+
+              <!-- Preserved native select for form serialization, accessibility and tests -->
+              <select id="topic-select" class="sr-only-select" tabindex="-1" required>
+                <option value="" disabled selected>-- Select a technical domain --</option>
+                <option value="JavaScript Programming">JavaScript Programming</option>
+                <option value="Python Programming">Python Programming</option>
+                <option value="Java Programming">Java Programming</option>
+                <option value="C Programming Language">C Programming Language</option>
+                <option value="C++ Programming Language">C++ Programming Language</option>
+                <option value="Data Structures & Algorithms (DSA)">Data Structures & Algorithms (DSA)</option>
+                <option value="Object-Oriented Programming (OOP) Concepts">Object-Oriented Programming (OOP) Concepts</option>
+                <option value="Operating Systems Concepts">Operating Systems Concepts</option>
+                <option value="Computer Networks Concepts">Computer Networks Concepts</option>
+                <option value="Database Management Systems (DBMS) & SQL">Database Management Systems (DBMS) & SQL</option>
+                <option value="Web Development Fundamentals (HTML, CSS, JavaScript Basics)">Web Development Fundamentals (HTML, CSS, JavaScript Basics)</option>
+                <option value="Software Engineering Basics (SDLC, Version Control, etc.)">Software Engineering Basics (SDLC, Version Control, etc.)</option>
+              </select>
+            </div>
+
+            <!-- Domain Scope Description (One-line subtitle) -->
+            <div id="domain-scope-desc" class="domain-scope-desc hidden">
+              <span class="scope-icon">🎯</span>
+              <span id="domain-scope-text" class="domain-scope-text"></span>
+            </div>
+
+            <!-- Inline Validation Feedback -->
+            <div id="topic-inline-feedback" class="topic-inline-feedback hidden" role="alert" aria-live="polite">
+              <span class="inline-feedback-icon">⚠️</span>
+              <span id="topic-inline-feedback-msg" class="inline-feedback-msg">Please select a valid topic from the dropdown list.</span>
+            </div>
+          </div>
+
+          <!-- Configuration Row: Starting Difficulty & Total Questions -->
+          <div class="form-row">
+            <!-- Starting Difficulty Custom Dropdown -->
+            <div class="form-group flex-1">
+              <label id="difficulty-label" for="difficulty-select-trigger">Starting Difficulty</label>
+              <div class="custom-dropdown-container" id="difficulty-dropdown-container">
+                <button 
+                  type="button" 
+                  class="custom-dropdown-trigger" 
+                  id="difficulty-select-trigger" 
+                  aria-haspopup="listbox" 
+                  aria-expanded="false"
+                  aria-labelledby="difficulty-label"
+                >
+                  <span class="dropdown-trigger-text" id="difficulty-trigger-text">⚡ Medium Challenge (Applied)</span>
+                  <span class="dropdown-arrow" aria-hidden="true">▾</span>
+                </button>
+                <div class="custom-dropdown-menu" id="difficulty-dropdown-menu" role="listbox" aria-labelledby="difficulty-label">
+                  <!-- Rendered options -->
+                </div>
+                <select id="start-difficulty" class="sr-only-select" tabindex="-1">
+                  <option value="easy">🌱 Easy Warm-up (Foundational)</option>
+                  <option value="medium" selected>⚡ Medium Challenge (Applied)</option>
+                  <option value="hard">🔥 Hard Challenge (Advanced / Deep)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Total Questions Custom Dropdown -->
+            <div class="form-group flex-1">
+              <label id="questions-label" for="questions-select-trigger">Total Questions</label>
+              <div class="custom-dropdown-container" id="questions-dropdown-container">
+                <button 
+                  type="button" 
+                  class="custom-dropdown-trigger" 
+                  id="questions-select-trigger" 
+                  aria-haspopup="listbox" 
+                  aria-expanded="false"
+                  aria-labelledby="questions-label"
+                >
+                  <span class="dropdown-trigger-text" id="questions-trigger-text">10 Questions (Standard Assessment)</span>
+                  <span class="dropdown-arrow" aria-hidden="true">▾</span>
+                </button>
+                <div class="custom-dropdown-menu" id="questions-dropdown-menu" role="listbox" aria-labelledby="questions-label">
+                  <!-- Rendered options -->
+                </div>
+                <select id="num-questions" class="sr-only-select" tabindex="-1">
+                  <option value="10" selected>10 Questions (Standard Assessment)</option>
+                  <option value="15">15 Questions (Deep Diagnostic)</option>
+                  <option value="20">20 Questions (Comprehensive Exam)</option>
+                  <option value="25">25 Questions (Mastery Evaluation)</option>
+                  <option value="30">30 Questions (Full Benchmark Simulation)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" id="start-btn" class="btn btn-primary btn-large">
+            <span class="btn-text">Start Adaptive Assessment</span>
+            <span class="btn-loader hidden" aria-hidden="true"></span>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════════════════ -->
+    <!-- 2. QUESTION SCREEN (One question at a time)                            -->
+    <!-- ══════════════════════════════════════════════════════════════════════ -->
+    <section id="test-screen" class="view-screen hidden">
+      <!-- Top Bar HUD -->
+      <div class="test-header card-mini">
+        <div class="test-meta">
+          <div class="meta-left">
+            <span class="question-counter" id="question-counter">Question 1 / 10</span>
+            <span id="difficulty-badge" class="difficulty-badge difficulty-medium">Medium</span>
+            <span id="concept-badge" class="concept-pill">Core Concept</span>
+            <span id="tier-streak-badge" class="tier-streak-pill" title="Tier Advancement Progress">Tier Progress: 0/3</span>
+          </div>
+
+          <!-- Live Per-Question Timer & Target Widget -->
+          <div class="timer-widget" id="timer-widget" title="Live response timer with target benchmark">
+            <span class="timer-icon">⏱️</span>
+            <span class="timer-digits" id="timer-digits">00:00</span>
+            <span class="timer-target" id="timer-target">/ Target: 25s</span>
+          </div>
+        </div>
+
+        <div class="progress-bar-track">
+          <div id="progress-bar-fill" class="progress-bar-fill" style="width: 10%;"></div>
+        </div>
+      </div>
+
+      <!-- Question Card -->
+      <div class="card question-card">
+        <!-- Fallback Alert Banner -->
+        <div id="fallback-warning-badge" class="fallback-warning-badge hidden">
+          <span class="warning-icon">⚠️</span>
+          <span class="warning-text">Question generation is using curated knowledge bank</span>
+        </div>
+
+        <!-- Subtopic Header Banner -->
+        <div class="subtopic-banner">
+          <span class="subtopic-label">Curriculum Subtopic:</span>
+          <span id="subtopic-title" class="subtopic-title">Loading subtopic...</span>
+        </div>
+
+        <!-- Question Container (splits text & code block cleanly) -->
+        <div id="question-container" class="question-container">
+          <div id="question-text" class="question-text">Loading question...</div>
+          <div id="question-code-panel" class="question-code-panel hidden">
+            <div class="code-panel-header">
+              <div class="code-panel-dots">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+              </div>
+              <span class="code-panel-title" id="code-panel-title">Code Snippet</span>
+            </div>
+            <pre class="code-panel-pre"><code id="question-code-block" class="code-panel-code"></code></pre>
+          </div>
+        </div>
+
+        <!-- 4 Balanced Large Clickable Options Grid -->
+        <div id="options-container" class="options-grid">
+          <!-- Option buttons inserted dynamically -->
+        </div>
+
+        <!-- Progressive Strategic Hint Section (Unlocks at Benchmark + 30s) -->
+        <div id="hint-container" class="hint-container hint-locked">
+          <div class="hint-header">
+            <div class="hint-icon-wrap">
+              <span id="hint-icon" class="hint-icon">💡</span>
+            </div>
+            <div class="hint-status-wrap">
+              <span id="hint-status-title" class="hint-status-title">Thinking Approach Clue</span>
+              <span id="hint-status-sub" class="hint-status-sub">Unlocks automatically after 30s past benchmark target</span>
+            </div>
+            <button type="button" id="hint-toggle-btn" class="hint-toggle-btn hidden">
+              View Clue
+            </button>
+          </div>
+          <div id="hint-body" class="hint-body hidden">
+            <p id="hint-text" class="hint-text"></p>
+          </div>
+        </div>
+
+        <!-- Inline Evaluating Loader -->
+        <div id="evaluating-loader" class="evaluating-loader hidden">
+          <div class="spinner"></div>
+          <span>Evaluating response & adapting difficulty...</span>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <!-- 3. ANSWER FEEDBACK (Shown after selecting an option)           -->
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <div id="feedback-panel" class="feedback-panel hidden">
+          <div class="feedback-top-row">
+            <div id="feedback-status" class="feedback-status">
+              <span id="feedback-icon" class="feedback-icon">✓</span>
+              <span id="feedback-title" class="feedback-title">Correct!</span>
+            </div>
+            <div id="cognitive-pill" class="cognitive-pill diag-mastered">
+              <span id="cognitive-pill-icon">⚡</span>
+              <span id="cognitive-pill-text">Fluent Mastery</span>
+            </div>
+          </div>
+
+          <div class="explanation-box">
+            <div class="explanation-heading">Conceptual Analysis & Explanation:</div>
+            <div id="explanation-text" class="explanation-text"></div>
+          </div>
+
+          <button id="next-btn" class="btn btn-primary btn-large">
+            <span id="next-btn-text">Next Question &rarr;</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════════════════ -->
+    <!-- 4. RESULTS SCREEN (Shown after final question)                        -->
+    <!-- ══════════════════════════════════════════════════════════════════════ -->
+    <section id="results-screen" class="view-screen hidden">
+      <div class="card results-card">
+        <div class="results-header">
+          <div id="score-emoji" class="score-emoji">🎉</div>
+          <h1 class="results-title">Diagnostic Assessment Report</h1>
+          <p id="results-topic-subtitle" class="results-subtitle">Comprehensive Technical Performance & Pacing Breakdown</p>
+          
+          <div class="score-display">
+            <div class="score-number-container">
+              <span id="final-score" class="score-number">0</span>
+              <span id="final-total" class="score-denominator">/ 10</span>
+            </div>
+            <div id="score-percentage" class="score-percentage">0% Accuracy</div>
+          </div>
+        </div>
+
+        <!-- DIFFICULTY PROGRESSION CHART (Prominent adaptive engine visualization) -->
+        <div class="chart-section" id="chart-section">
+          <div class="chart-header-row">
+            <div>
+              <h2 class="section-heading chart-heading">📈 Adaptive Difficulty Progression</h2>
+              <p class="chart-subheading">Shows how question difficulty adapted based on your consecutive answers</p>
+            </div>
+            <div class="chart-legend">
+              <span class="legend-item"><span class="legend-dot dot-easy"></span> Easy</span>
+              <span class="legend-item"><span class="legend-dot dot-med"></span> Medium</span>
+              <span class="legend-item"><span class="legend-dot dot-hard"></span> Hard</span>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div id="chart-svg-wrapper" class="chart-svg-wrapper">
+              <!-- SVG step/line chart rendered dynamically via JS -->
+            </div>
+          </div>
+
+          <!-- Difficulty Path Pills below chart -->
+          <div class="progression-container">
+            <div id="difficulty-path" class="difficulty-path">
+              <!-- Rendered pills -->
+            </div>
+          </div>
+        </div>
+
+        <!-- DETAILED QUESTION REVIEW (Collapsible / Expandable breakdown) -->
+        <div class="breakdown-section">
+          <div class="breakdown-header-bar">
+            <div>
+              <h2 class="section-heading">Detailed Question Review</h2>
+              <p class="section-subtext">Click any question to view full details and explanation</p>
+            </div>
+            <div class="breakdown-controls">
+              <div class="filter-tabs">
+                <button type="button" class="filter-btn active" data-filter="all">All</button>
+                <button type="button" class="filter-btn" data-filter="mistakes">Mistakes Only</button>
+                <button type="button" class="filter-btn" data-filter="hesitant">Time Exceeded / Gaps</button>
+              </div>
+              <button type="button" id="toggle-all-breakdown-btn" class="toggle-all-btn">
+                Expand All
+              </button>
+            </div>
+          </div>
+
+          <div id="breakdown-list" class="breakdown-list">
+            <!-- Dynamically populated collapsible review cards -->
+          </div>
+        </div>
+
+        <!-- Subtopic Curriculum Coverage & Mastery -->
+        <div class="concept-breakdown-section">
+          <h2 class="section-heading">📊 Subtopic Curriculum Coverage & Mastery</h2>
+          <div class="concept-list" id="concept-list">
+            <!-- Concept bars rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Benchmark vs. Actual Solve Time Matrix -->
+        <div class="benchmark-table-section">
+          <h2 class="section-heading">⏱️ Benchmark Target vs. Actual Solve Time Analysis</h2>
+          <div class="table-wrapper">
+            <table class="benchmark-table" id="benchmark-table">
+              <thead>
+                <tr>
+                  <th>Question & Subtopic</th>
+                  <th>Benchmark</th>
+                  <th>Your Time</th>
+                  <th>Pace Delta</th>
+                  <th>Outcome</th>
+                </tr>
+              </thead>
+              <tbody id="benchmark-table-body">
+                <!-- Rows populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Cognitive Fluency Summary -->
+        <div class="cognitive-matrix-section">
+          <h2 class="section-heading">🧠 Cognitive Retrieval & Fluency Profile</h2>
+          <div class="matrix-grid" id="matrix-grid">
+            <div class="matrix-card card-mastered">
+              <div class="matrix-icon">⚡</div>
+              <div class="matrix-count" id="count-mastered">0</div>
+              <div class="matrix-label">Fluent Mastery</div>
+              <div class="matrix-sub">Accurate & Fast (&lt;20s)</div>
+            </div>
+            <div class="matrix-card card-solid">
+              <div class="matrix-icon">✓</div>
+              <div class="matrix-count" id="count-solid">0</div>
+              <div class="matrix-label">Solid Understanding</div>
+              <div class="matrix-sub">Accurate on benchmark</div>
+            </div>
+            <div class="matrix-card card-hesitant">
+              <div class="matrix-icon">⏳</div>
+              <div class="matrix-count" id="count-hesitant">0</div>
+              <div class="matrix-label">Cognitive Drag</div>
+              <div class="matrix-sub">Correct but slow (&gt;target)</div>
+            </div>
+            <div class="matrix-card card-impulsive">
+              <div class="matrix-icon">🚨</div>
+              <div class="matrix-count" id="count-impulsive">0</div>
+              <div class="matrix-label">Impulsive Traps</div>
+              <div class="matrix-sub">Rushed distractor trap</div>
+            </div>
+            <div class="matrix-card card-gap">
+              <div class="matrix-icon">🛑</div>
+              <div class="matrix-count" id="count-gap">0</div>
+              <div class="matrix-label">Skill Gaps</div>
+              <div class="matrix-sub">Slow & incorrect</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actionable Remediation Plan -->
+        <div class="recommendations-section">
+          <h2 class="section-heading">🎯 Personalized Actionable Remediation Plan</h2>
+          <ul class="recommendation-list" id="recommendation-list">
+            <!-- Rendered items -->
+          </ul>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="results-actions">
+          <button id="copy-report-btn" class="btn btn-secondary">
+            📋 Copy Complete Diagnostic Report
+          </button>
+          <button id="restart-btn" class="btn btn-primary btn-large">
+            Take Another Assessment
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
